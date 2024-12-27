@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <string.h>
+
+// Structure to store item details
+struct Item {
+    char name[50];
+    int quantity;
+    float price;
+    float total;
+};
+
+// Function prototypes
+void addItem(struct Item items[], int *count);
+void displayBill(struct Item items[], int count);
+void generateTotal(struct Item items[], int count);
+
+int main() {
+    struct Item items[100];  // Array to store items
+    int count = 0, choice;
+
+    printf("===== Billing System =====\n");
+
+    do {
+        printf("\n1. Add Item\n");
+        printf("2. Display Bill\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addItem(items, &count);
+                break;
+            case 2:
+                displayBill(items, count);
+                break;
+            case 3:
+                printf("Thank you for using the Billing System!\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 3);
+
+    return 0;
+}
+
+// Function to add items
+void addItem(struct Item items[], int *count) {
+    printf("\nEnter item name: ");
+    scanf(" %[^\n]", items[*count].name);  // Read input with spaces
+    printf("Enter quantity: ");
+    scanf("%d", &items[*count].quantity);
+    printf("Enter price per unit: ");
+    scanf("%f", &items[*count].price);
+
+    items[*count].total = items[*count].quantity * items[*count].price;
+    printf("Item added successfully!\n");
+    (*count)++;
+}
+
+// Function to display the bill
+void displayBill(struct Item items[], int count) {
+    float grandTotal = 0;
+
+    if (count == 0) {
+        printf("\nNo items added yet.\n");
+        return;
+    }
+
+    printf("\n===== Final Bill =====\n");
+    printf("%-20s %-10s %-10s %-10s\n", "Item Name", "Quantity", "Price", "Total");
+    printf("---------------------------------------------------------\n");
+
+    for (int i = 0; i < count; i++) {
+        printf("%-20s %-10d %-10.2f %-10.2f\n", 
+               items[i].name, items[i].quantity, items[i].price, items[i].total);
+        grandTotal += items[i].total;
+    }
+
+    printf("---------------------------------------------------------\n");
+    printf("Grand Total: %.2f\n", grandTotal);
+}
